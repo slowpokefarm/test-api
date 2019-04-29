@@ -26,7 +26,7 @@ class BlogController extends Controller
 
         if ($term = $rest->query('tag')) {
             $query->whereHas('tags', function (Builder $builder) use ($term) {
-                $builder->whereColumn('term', $term);
+                $builder->where('term', '=', $term);
             });
         }
 

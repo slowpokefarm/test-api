@@ -10,7 +10,7 @@ class UserController extends Controller
 {
     public function userBlogs(User $user) {
         $query = Blog::query();
-        $query->whereColumn('author_id', $user->id);
+        $query->where('author_id', '=', $user->id);
         $paginator = $query->paginate();
 
         return BlogResource::collection($paginator);

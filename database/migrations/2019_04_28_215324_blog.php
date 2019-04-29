@@ -17,7 +17,7 @@ class Blog extends Migration
             $blueprint->increments('id');
             $blueprint->string('title');
             $blueprint->text('body');
-            $blueprint->integer('author_id')->nullable();
+            $blueprint->bigInteger('author_id')->nullable()->unsigned();
             $blueprint->integer('views_counter')->default(0);
             $blueprint->timestamps();
 
@@ -30,8 +30,8 @@ class Blog extends Migration
         });
 
         Schema::create('blog_files', function(Blueprint $blueprint){
-            $blueprint->integer('blog_id');
-            $blueprint->integer('file_id');
+            $blueprint->integer('blog_id')->unsigned();
+            $blueprint->integer('file_id')->unsigned();
 
             $blueprint->foreign('blog_id', 'blog_files__blog__fk')->references('id')->on('blog')->onUpdate('CASCADE')->onDelete('CASCADE');
             $blueprint->foreign('file_id', 'blog_files__file__fk')->references('id')->on('file')->onUpdate('CASCADE')->onDelete('CASCADE');
@@ -47,8 +47,8 @@ class Blog extends Migration
         });
 
         Schema::create('blog_tags', function (Blueprint $blueprint) {
-            $blueprint->integer('blog_id');
-            $blueprint->integer('tag_id');
+            $blueprint->integer('blog_id')->unsigned();
+            $blueprint->integer('tag_id')->unsigned();
 
             $blueprint->foreign('blog_id', 'blog_tags__blog__fk')->references('id')->on('blog')->onUpdate('CASCADE')->onDelete('CASCADE');
             $blueprint->foreign('tag_id', 'blog_tags__tag__fk')->references('id')->on('tag_catalog')->onUpdate('CASCADE')->onDelete('CASCADE');
@@ -66,6 +66,10 @@ class Blog extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('blog_tags');
+        Schema::drop('tag_catalog');
+        Schema::drop('blog_files');
+        Schema::drop('file');
+        Schema::drop('blog');
     }
 }
